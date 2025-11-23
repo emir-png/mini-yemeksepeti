@@ -1,0 +1,102 @@
+﻿@model RegisterDto
+@{
+}
+
+<div class="row">
+    <div class="col-lg-6 mx-auto rounded border p-4">
+        <h2 class="text-center mb-3">Register</h2>
+        <hr />
+
+        <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+
+        <form method="post">
+            <div class="row mb-3">
+                <label class="col-sm-4 col-form-label">First Name*</label>
+                <div class="col-sm-8">
+                    <input class="form-control" asp-for="FirstName">
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-4 col-form-label">Last Name*</label>
+                <div class="col-sm-8">
+                    <input class="form-control" asp-for="LastName">
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-4 col-form-label">Email*</label>
+                <div class="col-sm-8">
+                    <input class="form-control" asp-for="Email">
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-4 col-form-label">Phone</label>
+                <div class="col-sm-8">
+                    <input class="form-control" asp-for="PhoneNumber">
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-4 col-form-label">Address*</label>
+                <div class="col-sm-8">
+                    <select class="form-control" asp-for="Address">
+                        <option value="Lalapaşa">Lalapaşa</option>
+                        <option value="Muratpaşa">Muratpaşa</option>
+                        <option value="Kurtuluş">Kurtuluş</option>
+                        <option value="Kazım Karabekir Paşa">Kazım Karabekir Paşa</option>
+                        <option value="İbrahim Hakkı">İbrahim Hakkı</option>
+                        <option value="Rabia Ana">Rabia Ana</option>
+                        <option value="Şükrüpaşa">Şükrüpaşa</option>
+                        <option value="Ömer Nasuhi Bilmen">Ömer Nasuhi Bilmen</option>
+                        <option value="Üniversite">Üniversite</option>
+                        <option value="Dadaşköy">Dadaşköy</option>
+                        <option value="Dumlu">Dumlu</option>
+                        <option value="Çiftlik">Çiftlik</option>
+                        <option value="Soğukçermik">Soğukçermik</option>
+                        <option value="Gökçeyamaç">Gökçeyamaç</option>
+                        <option value="Gülpınar">Gülpınar</option>
+                        <option value="Güngörmez">Güngörmez</option>
+                        <option value="Güzelova">Güzelova</option>
+                        <option value="Güzelyayla">Güzelyayla</option>
+                        <option value="Karagöbek">Karagöbek</option>
+                        <option value="Yıldızkent">Yıldızkent</option>
+                    </select>
+                    <span asp-validation-for="Address" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-4 col-form-label">Password*</label>
+                <div class="col-sm-8">
+                    <input class="form-control" type="password" asp-for="Password">
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-4 col-form-label">Confirm Password*</label>
+                <div class="col-sm-8">
+                    <input class="form-control" type="password" asp-for="ConfirmPassword">
+                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="offset-sm-4 col-sm-4 d-grid">
+                    <button type="submit" class="btn btn-primary">Register</button>
+                </div>
+                <div class="col-sm-4 d-grid">
+                    <a class="btn btn-outline-primary" asp-controller="Home" asp-action="Index" role="button">
+                        Cancel
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

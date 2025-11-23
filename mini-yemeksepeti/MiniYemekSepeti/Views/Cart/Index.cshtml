@@ -1,0 +1,169 @@
+﻿@model CheckoutDto
+@{
+}
+
+<div class="row border rounded-3">
+    <div class="col-md-8 p-3">
+        <h4>Shopping Cart</h4>
+        <hr />
+
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <div class="alert alert-warning alert-dismissible fade show mt-4" role="alert">
+                <strong>@ViewBag.ErrorMessage</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        <table class="table align-middle">
+            <tbody>
+                @foreach (var item in ViewBag.CartItems)
+                {
+                    <tr>
+                        <td>
+                            <img src="/products/@item.Food.ImageFileName" width="100" class="rounded" alt="...">
+                        </td>
+                        <td>
+                            <h4>@item.Food.Name</h4>
+                            <p>
+                                Restaurant: @item.Food.Restaurant<br>
+                                Category: @item.Food.Category<br>
+                                Price: @(item.Food.Price)tl
+                            </p>
+                        </td>
+                        <td style="white-space:nowrap">
+                            <button type="button" class="btn btn-outline-secondary btn-sm"
+                                    onclick="decrease(@item.Food.Id)">
+                                -
+                            </button>
+                            <span class="border rounded-3 p-2 m-1">@item.Quantity</span>
+                            <button type="button" class="btn btn-outline-secondary btn-sm"
+                                    onclick="increase(@item.Food.Id)">
+                                +
+                            </button>
+                        </td>
+                        <td>@(item.UnitPrice * item.Quantity)tl</td>
+                        <td>
+                            <i class="bi bi-trash text-danger h4" style="cursor: pointer" onclick="remove(@item.Food.Id)"></i>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-4">
+        <div class="text-white rounded my-2 p-3" style="background-color: deeppink;">
+            <h4>Order Summary</h4>
+            <hr />
+
+            @using Microsoft.AspNetCore.Identity
+            @inject SignInManager<ApplicationUser> SignInManager
+
+            @if (!SignInManager.IsSignedIn(User))
+            {
+                <div class="row">
+                    <div class="col">
+                        <p>Subtotal:</p>
+                    </div>
+                    <div class="col">
+                        <p class="text-end">@(ViewBag.Subtotal)tl</p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col d-grid">
+                        <a class="btn btn-light" asp-controller="Account" asp-action="Register">Register</a>
+                    </div>
+                    <div class="col d-grid">
+                        <a class="btn btn-outline-light" asp-controller="Account" asp-action="Login">Login</a>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <form method="post">
+                    <div class="mb-3">
+                        <label class="form-label">Delivery Address</label>
+                        <select class="form-select" asp-for="DeliveryAddress">
+                            <option value="Lalapaşa">Lalapaşa</option>
+                            <option value="Muratpaşa">Muratpaşa</option>
+                            <option value="Kurtuluş">Kurtuluş</option>
+                            <option value="Kazım Karabekir Paşa">Kazım Karabekir Paşa</option>
+                            <option value="İbrahim Hakkı">İbrahim Hakkı</option>
+                            <option value="Rabia Ana">Rabia Ana</option>
+                            <option value="Şükrüpaşa">Şükrüpaşa</option>
+                            <option value="Ömer Nasuhi Bilmen">Ömer Nasuhi Bilmen</option>
+                            <option value="Üniversite">Üniversite</option>
+                            <option value="Dadaşköy">Dadaşköy</option>
+                            <option value="Dumlu">Dumlu</option>
+                            <option value="Çiftlik">Çiftlik</option>
+                            <option value="Soğukçermik">Soğukçermik</option>
+                            <option value="Gökçeyamaç">Gökçeyamaç</option>
+                            <option value="Gülpınar">Gülpınar</option>
+                            <option value="Güngörmez">Güngörmez</option>
+                            <option value="Güzelova">Güzelova</option>
+                            <option value="Güzelyayla">Güzelyayla</option>
+                            <option value="Karagöbek">Karagöbek</option>
+                            <option value="Yıldızkent">Yıldızkent</option>
+                        </select>
+                        <span asp-validation-for="DeliveryAddress" class="text-warning"></span>
+                    </div>
+
+                    <!-- Bina Numarası ve Apartman Seçimi -->
+                    <div class="mb-3">
+                        <label class="form-label">Building Number</label>
+                        <select class="form-select" asp-for="BuildingNumber">
+                            <option value="">Select a Building</option>
+                            @for (int i = 1; i <= 30; i++)
+                            {
+                                <option value="@i">Building No @i - Apartment @i Block</option>
+                            }
+                        </select>
+                        <span asp-validation-for="BuildingNumber" class="text-warning"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Payment Method</label>
+                        <select class="form-select" asp-for="PaymentMethod">
+                            <option value="cash">Cash on Delivery</option>
+                            <option value="saved card">Pay with Saved Card</option>
+                        </select>
+                    </div>
+
+                    <hr>
+
+                    <div class="row">
+                        <div class="col">
+                            <p>Subtotal:</p>
+                        </div>
+                        <div class="col">
+                            <p class="text-end">@(ViewBag.Subtotal)tl</p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <p>Shipping:</p>
+                        </div>
+                        <div class="col">
+                            <p class="text-end">@(ViewBag.ShippingFee)tl</p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <p>Total:</p>
+                        </div>
+                        <div class="col">
+                            <p class="text-end">@(ViewBag.Total)tl</p>
+                        </div>
+                    </div>
+
+                    <div class="d-grid">
+                        <button class="btn btn-outline-light" type="submit">Checkout</button>
+                    </div>
+                </form>
+            }
+        </div>
+    </div>
+</div>

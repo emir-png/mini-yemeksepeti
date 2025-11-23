@@ -1,0 +1,63 @@
+﻿<div class="mx-auto rounded border p-4" style="width: 420px">
+    <h2 class="text-center mb-3">Order Details</h2>
+    <hr />
+
+    @if (ViewBag.SuccessMessage != null)
+    {
+        <div class="alert alert-success" role="alert">@ViewBag.SuccessMessage</div>
+        <a class="btn btn-outline-primary" asp-controller="ClientOrders" asp-action="Index">Back</a>
+    }
+    else
+    {
+        <div class="row mb-3">
+            <div class="col-5">Delivery Address</div>
+            <div class="col-7">
+                <select class="form-select" id="deliveryAddress" name="deliveryAddress">
+                    <option value="Lalapaşa">Lalapaşa</option>
+                    <option value="Muratpaşa">Muratpaşa</option>
+                    <option value="Kurtuluş">Kurtuluş</option>
+                    <option value="Kazım Karabekir Paşa">Kazım Karabekir Paşa</option>
+                    <option value="İbrahim Hakkı">İbrahim Hakkı</option>
+                    <option value="Rabia Ana">Rabia Ana</option>
+                    <option value="Şükrüpaşa">Şükrüpaşa</option>
+                    <option value="Ömer Nasuhi Bilmen">Ömer Nasuhi Bilmen</option>
+                    <option value="Üniversite">Üniversite</option>
+                    <option value="Dadaşköy">Dadaşköy</option>
+                    <option value="Dumlu">Dumlu</option>
+                    <option value="Çiftlik">Çiftlik</option>
+                    <option value="Soğukçermik">Soğukçermik</option>
+                    <option value="Gökçeyamaç">Gökçeyamaç</option>
+                    <option value="Gülpınar">Gülpınar</option>
+                    <option value="Güngörmez">Güngörmez</option>
+                    <option value="Güzelova">Güzelova</option>
+                    <option value="Güzelyayla">Güzelyayla</option>
+                    <option value="Karagöbek">Karagöbek</option>
+                    <option value="Yıldızkent">Yıldızkent</option>
+                </select>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-5">Payment Method</div>
+            <div class="col-7">@ViewBag.PaymentMethod</div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-5">Total Amount</div>
+            <div class="col-7">@(ViewBag.Total)tl</div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-5">Quantity</div>
+            <div class="col-7">@(ViewBag.CartSize)</div>
+        </div>
+
+        <form method="post">
+            <div class="row">
+                <div class="col-sm-6 d-grid">
+                    <button type="submit" class="btn btn-primary">Confirm</button>
+                </div>
+                <div class="col-sm-6 d-grid">
+                    <a class="btn btn-outline-primary" asp-controller="Cart" asp-action="Index">Back</a>
+                </div>
+            </div>
+        </form>
+    }
+</div>

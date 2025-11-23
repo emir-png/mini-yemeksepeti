@@ -1,0 +1,75 @@
+﻿@model List<Food>
+@{
+
+	int pageIndex = (int)ViewData["PageIndex"]!;
+	int totalPages = (int)ViewData["TotalPages"]!;
+
+	string search = (string)ViewData["Search"]!;
+}
+
+ 
+<h2 class="text-center mb-5">List of Food</h2>
+
+<div class="row mb-5">
+	<div class="col">
+		<a class="btn btn-primary" asp-controller="Food" asp-action="Create">New Food</a>
+	</div>
+	<div class="col">
+		<form class="d-flex" role="search">
+			<input class="form-control me-2" type="search" name="search" value="@search" placeholder="Search a food" aria-label="Search">
+			<button class="btn btn-outline-success" type="submit">Search</button>
+		</form>
+
+	</div>
+</div>
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>ID</th>
+			<th>Name</th>
+			<th>Restaurant</th>
+			<th>Category</th>
+			<th>Price</th>
+			<th>Image</th>
+			<th>Action</th>
+		</tr>
+	</thead>
+
+	<tbody>
+		@foreach (var food in Model)
+		{
+			<tr>
+				<td>@food.Id</td>
+				<td>@food.Name</td>
+				<td>@food.Restaurant</td>
+				<td>@food.Category</td>
+				<td>@(food.Price)tl</td>
+				<td><img src="/products/@food.ImageFileName" width="100" /></td>
+			
+				<td style="white-space:nowrap">
+					<a class="btn btn-primary btn-sm" asp-controller="Food" asp-action="Edit"
+					   asp-route-id="@food.Id">Edit</a>
+					<a class="btn btn-danger btn-sm" asp-controller="Food" asp-action="Delete"
+					   asp-route-id="@food.Id" onclick="return confirm('Are You Sure?')">Delete</a>
+				</td>                     
+			</tr>
+		}
+	</tbody>
+
+</table>
+
+
+<nav>
+	<ul class="pagination">
+		@for (int i = 1; i <= totalPages; i++)
+		{
+			string active = "";
+			if (i == pageIndex) active = "active";
+			<li class="page-item @active">
+				<a class="page-link" asp-route-pageIndex="@i"
+				   asp-route-search="@search">@i</a>
+			</li>
+		}
+	</ul>
+</nav>

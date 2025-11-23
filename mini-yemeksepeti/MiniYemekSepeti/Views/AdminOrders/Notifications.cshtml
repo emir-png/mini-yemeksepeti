@@ -1,0 +1,50 @@
+﻿@model IEnumerable<Notification>
+
+<!-- Displaying the title for the page -->
+<h3 class="text-center mb-4">Bildirimler</h3>
+
+<!-- Table structure to display the notifications -->
+<table class="table table-bordered table-striped table-hover">
+    <thead class="table-dark text-white">
+        <!-- Table headers -->
+        <tr>
+            <th>Bildirim ID</th> <!-- Notification ID -->
+            <th>Kullanıcı Adı</th> <!-- Customer Name -->
+            <th>Mesaj</th> <!-- Notification Message -->
+            <th>Sipariş Durumu</th> <!-- Order Status -->
+            <th>Sipariş Tarihi</th> <!-- Order Date -->
+            <th>Oluşturulma Tarihi</th> <!-- Created At Date -->
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Iterating through each notification in the model -->
+        @foreach (var notification in Model)
+        {
+            <!-- Set row class based on whether the notification has been read or not -->
+            <tr class="@(notification.IsRead ? "table-light" : "table-info")">
+                <!-- Display Notification ID -->
+                <td>@notification.Id</td>
+                <!-- Display Customer Name -->
+                <td>@notification.CustomerName</td>
+                <!-- Display Notification Message -->
+                <td>@notification.NotificationMessage</td>
+                <!-- Display Order Status -->
+                <td>@notification.OrderStatus</td>
+                <!-- Display Order Date, using a conditional check for null -->
+                <td>@notification.OrderDate?.ToString("dd/MM/yyyy")</td>
+                <!-- Display the Created At Date in a readable format -->
+                <td>@notification.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<hr />
+
+<!-- Form to clear all notifications -->
+<div class="text-center mt-4">
+    <form method="post" asp-action="ClearNotifications">
+        <!-- Button to trigger the clear action -->
+        <button type="submit" class="btn btn-danger">Bildirimleri Temizle</button>
+    </form>
+</div>

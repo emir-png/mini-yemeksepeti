@@ -1,0 +1,268 @@
+﻿@model Order
+
+@{
+    // Payment Badge Color Based on Payment Status
+    string paymentBadgeColor = "bg-danger"; // Default color for error or unprocessed payment
+    if (Model.PaymentStatus == "pending")
+    {
+        paymentBadgeColor = "bg-warning text-dark"; // Pending payment, yellow color
+    }
+    else if (Model.PaymentStatus == "accepted")
+    {
+        paymentBadgeColor = "bg-success"; // Accepted payment, green color
+    }
+    else if (Model.PaymentStatus == "canceled")
+    {
+        paymentBadgeColor = "bg-secondary"; // Canceled payment, gray color
+    }
+
+    // Order Badge Color Based on Order Status
+    string orderBadgeColor = "bg-danger"; // Default for error or unknown status
+    if (Model.OrderStatus == "created")
+    {
+        orderBadgeColor = "bg-warning text-dark"; // Order created, yellow color
+    }
+    else if (Model.OrderStatus == "accepted")
+    {
+        orderBadgeColor = "bg-success"; // Order accepted, green color
+    }
+    else if (Model.OrderStatus == "canceled")
+    {
+        orderBadgeColor = "bg-secondary"; // Order canceled, gray color
+    }
+    else if (Model.OrderStatus == "shipped")
+    {
+        orderBadgeColor = "bg-primary"; // Order shipped, blue color
+    }
+    else if (Model.OrderStatus == "delivered")
+    {
+        orderBadgeColor = "bg-success"; // Order delivered, green color (success)
+    }
+    else if (Model.OrderStatus == "returned")
+    {
+        orderBadgeColor = "bg-info text-dark"; // Order returned, info color (light blue)
+    }
+    else if (Model.OrderStatus == "deleted")
+    {
+        orderBadgeColor = "bg-dark"; // Order deleted, dark color
+    }
+}
+
+<h3 class="text-center mb-4">Order Details</h3>
+
+<a class="btn btn-link" asp-controller="AdminOrders" asp-action="Index">Orders</a>
+
+<div class="row mb-4">
+    <div class="col-lg-6">
+        <div class="border rounded py-3 px-4 h-100">
+            <h3 class="mb-4">Order</h3>
+
+            <div class="row mb-2 pb-2 border-bottom">
+                <div class="col">Order ID</div>
+                <div class="col">@Model.Id</div> <!-- Display Order ID -->
+            </div>
+
+            <div class="row mb-2 pb-2 border-bottom">
+                <div class="col">Delivery Address</div>
+                <div class="col">@Model.DeliveryAddress</div> <!-- Display Delivery Address -->
+            </div>
+
+            <div class="row mb-2 pb-2 border-bottom">
+                <div class="col">Payment Method</div>
+                <div class="col">@Model.PaymentMethod</div> <!-- Display Payment Method -->
+            </div>
+
+            <div class="row mb-2 pb-2 border-bottom">
+                <div class="col">Payment Status</div>
+                <div class="col">
+                    <span class="badge rounded-pill @paymentBadgeColor">@Model.PaymentStatus</span>
+                    <!-- Display Payment Status with Badge Color -->
+                    <a href="#" class="mx-2" data-bs-toggle="modal" data-bs-target="#paymentStatusModal">
+                        Edit
+                    </a>
+
+                    <a class="btn btn-link" asp-controller="AdminOrders" asp-action="OrderDetails" asp-route-id="@Model.Id">
+                        Details
+                    </a>
+                </div>
+            </div>
+
+
+            <div class="row mb-2 pb-2 border-bottom">
+                <div class="col">Order Status</div>
+                <div class="col">
+                    <span class="badge rounded-pill @orderBadgeColor">@Model.OrderStatus</span>
+                    <!-- Display Order Status with Badge Color -->
+                    <a href="#" class="ms-2" data-bs-toggle="modal" data-bs-target="#orderStatusModal">
+                        Edit
+                    </a>
+                </div>
+            </div>
+
+            <div class="row mb-2">
+                <div class="col">Order Date</div>
+                <div class="col">@Model.CreatedAt</div> <!-- Display Order Creation Date -->
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="border rounded py-3 px-4 h-100">
+            <h3 class="mb-4">Client</h3>
+
+            <div class="row mb-2 pb-2 border-bottom">
+                <div class="col">Name</div>
+                <div class="col">
+                    <a asp-controller="Users"
+                       asp-action="Details" asp-route-id="@Model.Client.Id">
+                        @(Model.Client.FirstName + " " + Model.Client.LastName)
+                    </a>
+                    <!-- Link to Client's Details Page -->
+                </div>
+            </div>
+
+            <div class="row mb-2 pb-2 border-bottom">
+                <div class="col">Orders</div>
+                <div class="col">
+                    @ViewBag.NumOrders
+                </div> <!-- Display Number of Orders -->
+            </div>
+
+            <div class="row mb-2 pb-2 border-bottom">
+                <div class="col">Email</div>
+                <div class="col">@Model.Client.Email</div> <!-- Display Client Email -->
+            </div>
+
+            <div class="row mb-2 pb-2 border-bottom">
+                <div class="col">Phone</div>
+                <div class="col">@Model.Client.PhoneNumber</div> <!-- Display Client Phone Number -->
+            </div>
+
+            <div class="row mb-2 pb-2 border-bottom">
+                <div class="col">Address</div>
+                <div class="col">@Model.Client.Address</div> <!-- Display Client's Address -->
+            </div>
+
+            <div class="row mb-2">
+                <div class="col">Registered At</div>
+                <div class="col">@Model.Client.CreatedAt</div> <!-- Display Client's Registration Date -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th style="width: 100px">Description</th>
+            <th></th>
+            <th style="width:100px">Units</th>
+            <th style="width:100px">Amount</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            decimal subtotal = 0; // Variable to store subtotal of items
+            foreach (var item in Model.Items)
+            {
+                subtotal += item.UnitPrice * item.Quantity; // Calculate subtotal
+
+                <tr>
+                    <td>
+                        <img src="/products/@item.Food.ImageFileName" width="100" alt="..." />
+                        <!-- Display Image of the Food Item -->
+                    </td>
+                    <td>
+                        <h4>
+                            <a style="text-decoration: none; color: inherit;" asp-controller="Shopping" 
+                                asp-action="Details" asp-route-id="@item.Food.Id">
+                                @item.Food.Name
+                             </a>
+                        </h4>
+                        @item.Food.Category<br> <!-- Display Food Category -->
+                        @(item.UnitPrice)tl <!-- Display Unit Price -->
+                    </td>
+                    <td>@item.Quantity</td> <!-- Display Quantity -->
+                    <td>@(item.UnitPrice * item.Quantity)tl</td> <!-- Display Total Price for Item -->
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<div class="ms-auto mb-3" style="width: 250px">
+    <div class="row">
+        <div class="col fw-bold">Subtotal:</div>
+        <div class="col text-end">@(Model.Items.Sum(item => item.UnitPrice * item.Quantity)) tl</div>
+        <!-- Calculate and Display Subtotal -->
+    </div>
+    <div class="row">
+        <div class="col fw-bold">Shipping Fee:</div>
+        <div class="col text-end">@(Model.ShippingFee) tl</div> <!-- Display Shipping Fee -->
+    </div>
+    <div class="row">
+        <div class="col fw-bold">Total:</div>
+        <div class="col text-end">@ViewBag.TotalAmount tl</div> <!-- Display Total Amount -->
+    </div>
+</div>
+
+<!-- Modal for updating payment status -->
+<div class="modal fade" id="paymentStatusModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5">Update Payment Status</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                
+                <form method="get" asp-controller="AdminOrders" asp-action="Edit">
+                    <input type="hidden" name="id" value="@Model.Id" />
+                    <label>Payment Status</label>
+                    <select class="form-select mb-2" name="payment_status" asp-for="PaymentStatus">
+                        <option value="pending">pending</option>
+                        <option value="accepted">accepted</option>
+                        <option value="canceled">canceled</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for updating order status -->
+<div class="modal fade" id="orderStatusModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5">Update Order Status</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                
+                <form method="get" asp-controller="AdminOrders" asp-action="Edit">
+                    <input type="hidden" name="id" value="@Model.Id" />
+                    <label>Order Status</label>
+                    <select class="form-select mb-2" name="order_status" asp-for="OrderStatus">
+                        <option value="created">created</option>
+                        <option value="accepted">accepted</option>
+                        <option value="canceled">canceled</option>
+                        <option value="shipped">shipped</option>
+                        <option value="delivered">delivered</option>
+                        <option value="returned">returned</option>
+                        <option value="deleted">deleted</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

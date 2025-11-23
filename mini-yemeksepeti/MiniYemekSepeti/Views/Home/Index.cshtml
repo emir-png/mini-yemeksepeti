@@ -1,0 +1,71 @@
+﻿@model List<Food>
+@{
+    ViewData["Title"] = "Home Page";
+    ViewData["HomePage"] = true;
+}
+
+<div style="background-color :palevioletred">
+    <div class="container text-white py-5">
+        <div class="row align-items-center g-5">
+            <div class="col-md-6">
+                <h1 class="mb-5 display-2"><strong>Online Food Ordering</strong></h1>
+                <p>
+                    Turkey's most popular ordering app
+                    (and there's no delivery fee!!!)
+                </p>
+            </div>
+            <div class="col-md-6 text-center">
+                <img src="/images/hero.png" class="img-fluid" alt="hero" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Adding Restaurant Logos Above "New Flavors" -->
+<div class="bg-light">
+    <div class="container py-4">
+        <!-- Displaying Restaurant Logos -->
+        <div class="row mb-4 text-center">
+            <div class="col-3">
+                <img src="/restaurant/01.png" alt="Burger King" class="img-fluid" style="max-height: 80px;" />
+            </div>
+            <div class="col-3">
+                <img src="/restaurant/02.png" alt="McDonald's" class="img-fluid" style="max-height: 80px;" />
+            </div>
+            <div class="col-3">
+                <img src="/restaurant/03.jpg" alt="Tatbak" class="img-fluid" style="max-height: 80px;" />
+            </div>
+            <div class="col-3">
+                <img src="/restaurant/04.png" alt="Lüks Pastanesi" class="img-fluid" style="max-height: 80px;" />
+            </div>
+        </div>
+
+        <!-- Horizontal line separating the logos from the "New Flavors" section -->
+        <hr style="border: 2px solid #000; margin: 20px 0;" />
+
+        <h2 class="pb-4 text-center">New Flavors</h2>
+
+        <div class="row mb-5 g-3">
+            @foreach (var food in Model)
+            {
+                <div class="col-lg-3 col-md-6">
+                    <div class="rounded border shadow p-3 text-center h-100">
+                        <img src="/products/@food.ImageFileName" class="img-fluid" alt="..."
+                             style="height:180px; object-fit:contain" />
+                        <hr />
+                        <h5 class="py-2">@food.Name</h5>
+                        <p>
+                            Restaurant: @food.Restaurant, Category: @food.Category
+                        </p>
+                        <h4 class="mb-3">@(food.Price)tl</h4>
+                        <a class="btn btn-primary btn-sm mb-2" asp-controller="Shopping"
+                           asp-action="Details" asp-route-id="@food.Id" role="button">Details</a>
+                        <button type="button" class="btn btn-warning btn-sm mb-2" onclick="addToCart(this, @food.Id)">
+                            Add to Cart <i class="bi bi-cart4"></i>
+                        </button>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
