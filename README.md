@@ -2,7 +2,7 @@ MINI YEMEK SEPETI PROJECT
 ------------------------------------------------------------
 Project Overview
 ------------------------------------------------------------
-The Mini Food Basket is a platform where users can place online food orders. The application allows users to browse through various meals, add them to a basket, place orders, and make payments. Additionally, admin users can manage meals, track order statuses, and generate reports.
+The Mini Food cart is a platform where users can place online food orders. The application allows users to browse through various meals, add them to a basket, place orders, and make payments. Additionally, admin users can manage meals, track order statuses, and generate reports.
 
 This project aims to provide a simple and efficient e-commerce system for users to order food while streamlining processes like meal management and order tracking for admins.
 ------------------------------------------------------------
